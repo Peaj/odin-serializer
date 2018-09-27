@@ -150,9 +150,20 @@ namespace OdinSerializer
         /// </returns>
         public T Deserialize(IDataReader reader)
         {
-            var context = reader.Context;
             T value = this.GetUninitializedObject();
+            Deserialize(ref value, reader);
+            return value;
+        }
 
+        public void Deserialize(object target, IDataReader reader)
+        {
+            T value = (T)target;
+            Deserialize(ref value, reader);
+        }
+
+        public void Deserialize(ref T value, IDataReader reader)
+        {
+            var context = reader.Context;
             // We allow the above method to return null (for reference types) because of special cases like arrays,
             //  where the size of the array cannot be known yet, and thus we cannot create an object instance at this time.
             //
@@ -224,8 +235,6 @@ namespace OdinSerializer
                     }
                 }
             }
-
-            return value;
         }
 
         /// <summary>

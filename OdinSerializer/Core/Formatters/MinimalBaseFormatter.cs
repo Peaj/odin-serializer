@@ -50,19 +50,45 @@ namespace OdinSerializer
         /// </returns>
         public T Deserialize(IDataReader reader)
         {
-            T result = this.GetUninitializedObject();
+            T value = this.GetUninitializedObject();
+            Deserialize(ref value, reader);
+            return value;
+        }
 
+        /// <summary>
+        /// Deserializes a value of type <see cref="!:T" /> into an existing field using a specified <see cref="T:OdinSerializer.IDataReader" />.
+        /// </summary>
+        /// <param name="target">The target to overwrite</param>
+        /// <param name="reader">The reader to use.</param>
+        /// <returns>
+        /// The deserialized value.
+        /// </returns>
+        public void Deserialize(object target, IDataReader reader)
+        {
+            T value = (T)target;
+            Deserialize(ref value, reader);
+        }
+
+        /// <summary>
+        /// Deserializes a value of type <see cref="!:T" /> into an existing field using a specified <see cref="T:OdinSerializer.IDataReader" />.
+        /// </summary>
+        /// <param name="value">The value to overwrite</param>
+        /// <param name="reader">The reader to use.</param>
+        /// <returns>
+        /// The deserialized value.
+        /// </returns>
+        public void Deserialize(ref T value, IDataReader reader)
+        {
             // We allow the above method to return null (for reference types) because of special cases like arrays,
             //  where the size of the array cannot be known yet, and thus we cannot create an object instance at this time.
             //
             // Therefore, those who override GetUninitializedObject and return null must call RegisterReferenceID manually.
-            if (IsValueType == false && object.ReferenceEquals(result, null) == false)
+            if (IsValueType == false && object.ReferenceEquals(value, null) == false)
             {
-                this.RegisterReferenceID(result, reader);
+                this.RegisterReferenceID(value, reader);
             }
 
-            this.Read(ref result, reader);
-            return result;
+            this.Read(ref value, reader);
         }
 
         /// <summary>

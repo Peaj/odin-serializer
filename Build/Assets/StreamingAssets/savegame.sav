@@ -1,0 +1,23 @@
+{
+    "$id": 0,
+    "$type": "0|UnityEngine.Transform, UnityEngine.CoreModule",
+    "localPosition": {
+        "$type": "1|UnityEngine.Vector3, UnityEngine.CoreModule",
+        0,
+        0.55,
+        0
+    },
+    "localRotation": {
+        "$type": "2|UnityEngine.Quaternion, UnityEngine.CoreModule",
+        0,
+        0,
+        0,
+        1
+    },
+    "localScale": {
+        "$type": 1,
+        1,
+        1,
+        1
+    }
+}

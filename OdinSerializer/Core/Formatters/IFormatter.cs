@@ -50,6 +50,16 @@ namespace OdinSerializer
         /// The deserialized value.
         /// </returns>
         object Deserialize(IDataReader reader);
+
+        /// <summary>
+        /// Deserializes a value into an existing object using a specified <see cref="IDataReader" />.
+        /// </summary>
+        /// <param name="target">The object to override</param>
+        /// <param name="reader">The reader to use.</param>
+        /// <returns>
+        /// The deserialized value.
+        /// </returns>
+        void Deserialize(object Target, IDataReader reader);
     }
 
     /// <summary>

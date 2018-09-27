@@ -77,5 +77,10 @@ namespace OdinSerializer
         public void Serialize(Coroutine value, IDataWriter writer)
         {
         }
+
+        public void Deserialize(object Target, IDataReader reader)
+        {
+            
+        }
     }
 }

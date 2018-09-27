@@ -41,17 +41,17 @@ namespace OdinSerializer.Utilities.Editor
             var compileForAOT = scriptingBackend == ScriptingImplementation.IL2CPP || !AssemblyImportSettingsUtilities.JITPlatforms.Contains(activeBuildTarget);
 
             // The EditorOnly dll should aways have the same import settings. But lets just make sure.
-            AssemblyImportSettingsUtilities.SetAssemblyImportSettings(EditorAssemblyPath, OdinAssemblyImportSettings.IncludeInEditorOnly);
+            AssemblyImportSettingsUtilities.SetAssemblyImportSettings(EditorUserBuildSettings.activeBuildTarget, EditorAssemblyPath, OdinAssemblyImportSettings.IncludeInEditorOnly);
 
             if (compileForAOT)
             {
-                AssemblyImportSettingsUtilities.SetAssemblyImportSettings(AOTAssemblyPath, OdinAssemblyImportSettings.IncludeInBuildOnly);
-                AssemblyImportSettingsUtilities.SetAssemblyImportSettings(JITAssemblyPath, OdinAssemblyImportSettings.ExcludeFromAll);
+                AssemblyImportSettingsUtilities.SetAssemblyImportSettings(EditorUserBuildSettings.activeBuildTarget, AOTAssemblyPath, OdinAssemblyImportSettings.IncludeInBuildOnly);
+                AssemblyImportSettingsUtilities.SetAssemblyImportSettings(EditorUserBuildSettings.activeBuildTarget, JITAssemblyPath, OdinAssemblyImportSettings.ExcludeFromAll);
             }
             else
             {
-                AssemblyImportSettingsUtilities.SetAssemblyImportSettings(AOTAssemblyPath, OdinAssemblyImportSettings.ExcludeFromAll);
-                AssemblyImportSettingsUtilities.SetAssemblyImportSettings(JITAssemblyPath, OdinAssemblyImportSettings.IncludeInBuildOnly);
+                AssemblyImportSettingsUtilities.SetAssemblyImportSettings(EditorUserBuildSettings.activeBuildTarget, AOTAssemblyPath, OdinAssemblyImportSettings.ExcludeFromAll);
+                AssemblyImportSettingsUtilities.SetAssemblyImportSettings(EditorUserBuildSettings.activeBuildTarget, JITAssemblyPath, OdinAssemblyImportSettings.IncludeInBuildOnly);
             }
 
             if (compileForAOT)

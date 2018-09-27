@@ -114,14 +114,24 @@
             All valid Unity BuildTarget platforms that support Just In Time compilation.
             </summary>
         </member>
-        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.SetAssemblyImportSettings(System.String,OdinSerializer.Utilities.Editor.OdinAssemblyImportSettings)">
+        <member name="F:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.JITScriptingBackends">
+            <summary>
+            All scripting backends that support JIT.
+            </summary>
+        </member>
+        <member name="F:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.JITApiCompatibilityLevels">
+            <summary>
+            All API compatibility levels that support JIT.
+            </summary>
+        </member>
+        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.SetAssemblyImportSettings(UnityEditor.BuildTarget,System.String,OdinSerializer.Utilities.Editor.OdinAssemblyImportSettings)">
             <summary>
             Set the import settings on the assembly.
             </summary>
             <param name="assemblyFilePath">The path to the assembly to configure import settings from.</param>
             <param name="importSettings">The import settings to configure for the assembly at the path.</param>
         </member>
-        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.SetAssemblyImportSettings(System.String,System.Boolean,System.Boolean)">
+        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.SetAssemblyImportSettings(UnityEditor.BuildTarget,System.String,System.Boolean,System.Boolean)">
             <summary>
             Set the import settings on the assembly.
             </summary>
@@ -134,6 +144,42 @@
             Gets the current scripting backend for the build from the Unity editor. This method is Unity version independent.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.GetCurrentApiCompatibilityLevel">
+            <summary>
+            Gets the current API compatibility level from the Unity Editor. This method is Unity version independent.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.PlatformSupportsJIT(UnityEditor.BuildTarget)">
+            <summary>
+            Gets a value that indicates if the specified platform supports JIT.
+            </summary>
+            <param name="platform">The platform to test.</param>
+            <returns><c>true</c> if the platform supports JIT; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.ScriptingBackendSupportsJIT(UnityEditor.ScriptingImplementation)">
+            <summary>
+            Gets a value that indicates if the specified scripting backend supports JIT.
+            </summary>
+            <param name="backend">The backend to test.</param>
+            <returns><c>true</c> if the backend supports JIT; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.ApiCompatibilityLevelSupportsJIT(UnityEditor.ApiCompatibilityLevel)">
+            <summary>
+            Gets a value that indicates if the specified api level supports JIT.
+            </summary>
+            <param name="apiLevel">The api level to test.</param>
+            <returns><c>true</c> if the api level supports JIT; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:OdinSerializer.Utilities.Editor.AssemblyImportSettingsUtilities.IsJITSupported(UnityEditor.BuildTarget,UnityEditor.ScriptingImplementation,UnityEditor.ApiCompatibilityLevel)">
+            <summary>
+            Gets a value that indicates if the specified build settings supports JIT.
+            </summary>
+            <param name="platform">The platform build setting.</param>
+            <param name="backend">The scripting backend build settting.</param>
+            <param name="apiLevel">The api level build setting.</param>
+            <returns><c>true</c> if the build settings supports JIT; otherwise <c>false</c>.</returns>
         </member>
         <member name="T:OdinSerializer.Utilities.FieldInfoExtensions">
             <summary>
@@ -522,9 +568,9 @@
             PropertyInfo method extensions.
             </summary>
         </member>
-        <member name="M:OdinSerializer.Utilities.PropertyInfoExtensions.IsAutoProperty(System.Reflection.PropertyInfo)">
+        <member name="M:OdinSerializer.Utilities.PropertyInfoExtensions.IsAutoProperty(System.Reflection.PropertyInfo,System.Boolean)">
             <summary>
-            Determines whether a property is an auto property.
+            Determines whether a property is an auto property with a usable getter and setter.
             </summary>
         </member>
         <member name="M:OdinSerializer.Utilities.PropertyInfoExtensions.IsAliasProperty(System.Reflection.PropertyInfo)">
@@ -6140,6 +6186,16 @@
             The deserialized value.
             </returns>
         </member>
+        <member name="M:OdinSerializer.IFormatter.Deserialize(System.Object,OdinSerializer.IDataReader)">
+            <summary>
+            Deserializes a value into an existing object using a specified <see cref="T:OdinSerializer.IDataReader" />.
+            </summary>
+            <param name="target">The object to override</param>
+            <param name="reader">The reader to use.</param>
+            <returns>
+            The deserialized value.
+            </returns>
+        </member>
         <member name="T:OdinSerializer.IFormatter`1">
             <summary>
             Serializes and deserializes a given type T.
@@ -6237,6 +6293,26 @@
             <summary>
             Deserializes a value of type <see cref="!:T" /> using a specified <see cref="T:OdinSerializer.IDataReader" />.
             </summary>
+            <param name="reader">The reader to use.</param>
+            <returns>
+            The deserialized value.
+            </returns>
+        </member>
+        <member name="M:OdinSerializer.MinimalBaseFormatter`1.Deserialize(System.Object,OdinSerializer.IDataReader)">
+            <summary>
+            Deserializes a value of type <see cref="!:T" /> into an existing field using a specified <see cref="T:OdinSerializer.IDataReader" />.
+            </summary>
+            <param name="target">The target to overwrite</param>
+            <param name="reader">The reader to use.</param>
+            <returns>
+            The deserialized value.
+            </returns>
+        </member>
+        <member name="M:OdinSerializer.MinimalBaseFormatter`1.Deserialize(`0@,OdinSerializer.IDataReader)">
+            <summary>
+            Deserializes a value of type <see cref="!:T" /> into an existing field using a specified <see cref="T:OdinSerializer.IDataReader" />.
+            </summary>
+            <param name="value">The value to overwrite</param>
             <param name="reader">The reader to use.</param>
             <returns>
             The deserialized value.
@@ -7479,16 +7555,20 @@
         </member>
         <member name="P:OdinSerializer.SerializationPolicies.Unity">
             <summary>
-            Public fields and fields or auto-properties marked with <see cref="T:UnityEngine.SerializeField"/> or <see cref="T:OdinSerializer.OdinSerializeAttribute"/> and not marked with <see cref="T:System.NonSerializedAttribute"/> are serialized.
+            Public fields, as well as fields or auto-properties marked with <see cref="T:UnityEngine.SerializeField"/> or <see cref="T:OdinSerializer.OdinSerializeAttribute"/> and not marked with <see cref="T:System.NonSerializedAttribute"/>, are serialized.
             <para />
-            There are two exceptions: all fields in tuples, as well as in private nested types marked as compiler generated (e.g. lambda capture classes) are also serialized.
+            There are two exceptions:
+            <para/>1) All fields in tuples, as well as in private nested types marked as compiler generated (e.g. lambda capture classes) are also serialized.
+            <para/>2) Virtual auto-properties are never serialized. Note that properties specified by an implemented interface are automatically marked virtual by the compiler.
             </summary>
         </member>
         <member name="P:OdinSerializer.SerializationPolicies.Strict">
             <summary>
             Only fields and auto-properties marked with <see cref="T:UnityEngine.SerializeField"/> or <see cref="T:OdinSerializer.OdinSerializeAttribute"/> and not marked with <see cref="T:System.NonSerializedAttribute"/> are serialized.
             <para />
-            There is one exception: all fields in private nested types marked as compiler generated (e.g. lambda capture classes) are also serialized.
+            There are two exceptions:
+            <para/>1) All fields in private nested types marked as compiler generated (e.g. lambda capture classes) are also serialized.
+            <para/>2) Virtual auto-properties are never serialized. Note that properties specified by an implemented interface are automatically marked virtual by the compiler.
             </summary>
         </member>
         <member name="T:OdinSerializer.BooleanSerializer">
@@ -9567,12 +9647,13 @@
             Not yet documented.
             </summary>
         </member>
-        <member name="M:OdinSerializer.UnitySerializationUtility.OdinWillSerialize(System.Reflection.MemberInfo,System.Boolean)">
+        <member name="M:OdinSerializer.UnitySerializationUtility.OdinWillSerialize(System.Reflection.MemberInfo,System.Boolean,OdinSerializer.ISerializationPolicy)">
             <summary>
             Checks whether Odin will serialize a given member.
             </summary>
             <param name="member">The member to check.</param>
             <param name="serializeUnityFields">Whether to allow serialization of members that will also be serialized by Unity.</param>
+            <param name="serializeUnityFields">The policy that Odin should be using for serialization of the given member. If this parameter is null, it defaults to <see cref="P:OdinSerializer.SerializationPolicies.Unity"/>.</param>
             <returns>True if Odin will serialize the member, otherwise false.</returns>
         </member>
         <member name="M:OdinSerializer.UnitySerializationUtility.GuessIfUnityWillSerialize(System.Reflection.MemberInfo)">
